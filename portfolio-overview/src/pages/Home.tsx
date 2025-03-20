@@ -5,6 +5,7 @@ import { RootState } from "../store";
 import { clearSymbolQuantity, updateSymbolQuantity } from "../store/symbolQuantitySlice";
 import { TickerComponent } from "../components/TickerComponent/TickerComponent";
 import axios from "axios";
+import { removeAllTicker } from "../store/tickerSlice";
 
 interface SymbolAndQuantity {
   symbol: string;
@@ -26,13 +27,11 @@ interface ExchangeInfoResponse {
 export const Home = () => {
 
   const symbolQuantity = useSelector((state: RootState) => state.symbolQuantity.symbolQuantity);
+  const tickers = useSelector((state: RootState) => state.tickers.tickers);
   const [isAddAction, setIsAddAction] = useState<boolean>(false)
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("getPriceInUSD(BTC)",getPriceInUSD("ETH"))
-    // const pathСonvert = "https://api.binance.com/api/v3/ticker/price"
-    // axios.get(pathСonvert)
 
   }, [])
 
@@ -72,7 +71,9 @@ export const Home = () => {
 
   const deleteSubscription = () => {
     dispatch(clearSymbolQuantity())
+    dispatch(removeAllTicker())
   }
+
 
   return (
     <div className="home-container">
@@ -86,15 +87,17 @@ export const Home = () => {
     {isAddAction && <FormAdd toggleAction={addSymbolQuantity} />}
 
     <div className="ticker-grid">
-      {Object.values(symbolQuantity).map((symbol) => (
-        <TickerComponent
-          key={symbol.symbol}
-          symbol={symbol.symbol}
-          quantity={symbol.quantity}
-          quoteAsset={symbol.quoteAsset}
-          baseAsset={symbol.baseAsset}
-        />
-      ))}
+      {Object.values(symbolQuantity).map((symbol, ind) => {
+        return (
+          <TickerComponent
+            key={symbol.symbol}
+            symbol={symbol.symbol}
+            quantity={symbol.quantity}
+            baseAsset={symbol.baseAsset}
+            quoteAsset={symbol.quoteAsset}
+          />
+        );
+      })}
     </div>
   </div>
   );

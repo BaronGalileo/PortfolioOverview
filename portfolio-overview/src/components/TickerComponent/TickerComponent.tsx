@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useWebSocket from "react-use-websocket";
 import axios from "axios";
 import { removeSymbolQuantity } from "../../store/symbolQuantitySlice";
 import { RootState } from "../../store";
-import { removeTicker, setTicker } from "../../store/tickerSlice";
+import { removeTicker, updateTicker } from "../../store/tickerSlice";
 
 type TickerProps = {
   symbol: string;
@@ -16,6 +16,8 @@ type TickerProps = {
 export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset }: TickerProps) => {
   const dispatch = useDispatch();
   const tickers = useSelector((state: RootState) => state.tickers.tickers);
+  const [portfolioShare, setPortfolioShare] = useState<number>(0);
+  const [priceInUSD, setPriceInUsd] = useState<number>(0)
 
   const socketUrl = `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@ticker`;
 
@@ -23,19 +25,18 @@ export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset }: Tic
     shouldReconnect: () => true,
     onMessage: (message) => {
       const data = JSON.parse(message.data);
-      
-      // Проверяем, изменились ли данные перед диспетчингом
+    
       if (tickers[data.s] && tickers[data.s].currentPrice === parseFloat(data.c)) return;
       
       dispatch(
-        setTicker({
+        updateTicker({
           s: data.s,
           baseAsset,
           quantity,
           currentPrice: parseFloat(data.c),
           totalValue: parseFloat(data.c) * quantity,
           priceChangePercent: parseFloat(data.P),
-          valueInUSD: tickers[data.s]?.valueInUSD || null, // Сохраняем старое значение
+          valueInUSD: tickers[symbol]?.valueInUSD || null,
         })
       );
     },
@@ -52,7 +53,6 @@ export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset }: Tic
   };
 
   useEffect(() => {
-    // Проверяем, есть ли уже тикер в store перед выполнением запроса
     if (tickers[symbol]) return;
 
     const fetchInitialPrice = async () => {
@@ -61,15 +61,15 @@ export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset }: Tic
         const usdPrice = await getPriceInUSD(baseAsset);
 
         dispatch(
-          setTicker({
-            s: symbol,
-            baseAsset,
-            quantity,
-            currentPrice: parseFloat(data.price),
-            totalValue: parseFloat(data.price) * quantity,
-            priceChangePercent: 0,
-            valueInUSD: usdPrice ? usdPrice * quantity : null,
-          })
+            updateTicker({
+                s: symbol,
+                baseAsset,
+                quantity,
+                currentPrice: parseFloat(data.price),
+                totalValue: parseFloat(data.price) * quantity,
+                priceChangePercent: 0,
+                valueInUSD: usdPrice ? usdPrice * quantity : null,
+            })
         );
       } catch (error) {
         console.error("Ошибка при получении начальных данных:", error);
@@ -77,7 +77,19 @@ export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset }: Tic
     };
 
     fetchInitialPrice();
-  }, [symbol, baseAsset, quantity, dispatch, tickers]);
+  }, []);
+
+  const totalPortfolioValue = Object.values(tickers).reduce((acc, ticker) => acc + (ticker.valueInUSD || 0), 0);
+
+  useEffect(() => {
+    const ticker = tickers[symbol];
+    if (ticker?.valueInUSD !== null && typeof ticker?.valueInUSD === "number" && totalPortfolioValue > 0) {
+      setPortfolioShare(Number(((ticker.valueInUSD / totalPortfolioValue) * 100).toFixed(2)));
+    }
+    if(ticker?.valueInUSD !== null) {
+      setPriceInUsd(ticker?.valueInUSD)
+    }
+  }, [tickers, symbol, totalPortfolioValue]);
 
   const disconnectWebSocket = (symbol: string) => {
     dispatch(removeSymbolQuantity(symbol));
@@ -98,32 +110,23 @@ export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset }: Tic
   const actinSymbol = getCurrencySymbol(baseAsset)
   const currency = getCurrencySymbol(quoteAsset)
 
-  const totalPortfolioValue = Object.values(tickers).reduce((acc, ticker) => acc + (ticker.valueInUSD || 0), 0);
 
   return (
     <div className="ticker-container">
-      {Object.values(tickers).map((ws) => (
-        <div className="ticker-card" key={ws.s}>
-          <h2>Данные для {ws.baseAsset} {actinSymbol} в {currency}</h2>
-          <p>Количество: {ws.quantity}</p>
-          <p>Текущая цена: {ws.currentPrice} {currency}</p>
-          <p>Общая стоимость: {ws.totalValue} {currency}</p>
-          <p>Стоимость в USD: {ws.valueInUSD ? `$${ws.valueInUSD.toFixed(2)}` : "—"}</p>
-          <p>Процент изменения за 24 часа: {ws.priceChangePercent}%</p>
-          {totalPortfolioValue > 0 && ws.valueInUSD !== null && (
-            <p>Доля в портфеле: {((ws.valueInUSD / totalPortfolioValue) * 100).toFixed(2)}%</p>
-          )}
-          <button className="remove-button" onClick={() => disconnectWebSocket(ws.s)}>
-            Убрать {ws.baseAsset}
-          </button>
-        </div>
-      ))}
-
-      {totalPortfolioValue > 0 && (
-        <div className="portfolio-summary">
-          <h3>Общая стоимость портфеля: ${totalPortfolioValue.toFixed(2)}</h3>
-        </div>
-      )}
+        {tickers[symbol]?.s &&
+        <div className="ticker-card" key={tickers[symbol].s}>
+            <h2>Данные для {tickers[symbol].baseAsset} {actinSymbol} в {currency}</h2>
+            <p>Количество: {tickers[symbol].quantity}</p>
+            <p>Текущая цена: {tickers[symbol].currentPrice} {currency}</p>
+            <p>Общая стоимость: {tickers[symbol].totalValue} {currency}</p>
+            {priceInUSD && <p>Стоимость в USD: {priceInUSD} $</p>}
+            <p>Процент изменения за 24 часа: {tickers[symbol].priceChangePercent}%</p>
+            {portfolioShare&&
+            <p>Доля в портфеле: {portfolioShare}%</p>}
+            <button className="remove-button" onClick={() => disconnectWebSocket(tickers[symbol].s)}>
+            Убрать {tickers[symbol].baseAsset}
+            </button>
+        </div>}
     </div>
   );
 };
