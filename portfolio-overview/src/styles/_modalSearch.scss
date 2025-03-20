@@ -1,0 +1,117 @@
+@use 'color' as col;
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    position: relative;
+    background: white;
+    width: 400px;
+    max-height: 500px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        background: col.$button__danger; 
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease-in-out;
+    
+        &:hover {
+          background: col.$button__danger_hover; 
+        }
+    }
+  
+    h1 {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      color: #333;
+    }
+  
+    button {
+      padding: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      background: col.$button__green;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease-in-out;
+  
+      &:hover {
+        background: #45a049;
+      }
+  
+      &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  
+    input,
+    select {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      width: 100%;
+    }
+  
+    select {
+      background: white;
+      cursor: pointer;
+    }
+  
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+  
+      li {
+        button {
+          width: 100%;
+          text-align: center;
+          background: #007bff;
+          color: white;
+          transition: background 0.3s;
+  
+          &:hover {
+            background: #0056b3;
+          }
+        }
+      }
+    }
+  }

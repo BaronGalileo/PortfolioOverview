@@ -10,8 +10,7 @@ import {
   REGISTER,
  } from 'redux-persist'
 import storage from 'redux-persist/lib/storage';
-import tickerReducer from './tickerSlice';
-import webSocketReducer from './webSocketSlice';
+import tickerReducer from './tickerSlice'
 import symbolQuantityReducer from './symbolQuantitySlice';
 
 
@@ -20,8 +19,7 @@ import symbolQuantityReducer from './symbolQuantitySlice';
 
 
 const rootReducer = combineReducers({
-  ticker: tickerReducer,
-  websocket: webSocketReducer,
+  tickers: tickerReducer,
   symbolQuantity: symbolQuantityReducer,
 
 })

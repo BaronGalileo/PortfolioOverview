@@ -8,7 +8,7 @@ interface SymbolAndQuantity {
 }
 
 interface SymbolQuantityState {
-  symbolQuantity: Record<string, SymbolAndQuantity>;  // Вместо массива используем объект
+  symbolQuantity: Record<string, SymbolAndQuantity>;  
 }
 
 const initialState: SymbolQuantityState = {
@@ -21,13 +21,13 @@ const symbolQuantitySlice = createSlice({
   reducers: {
     updateSymbolQuantity: (state, action: PayloadAction<SymbolAndQuantity>) => {
       const { symbol } = action.payload;
-      state.symbolQuantity[symbol] = action.payload; // Ключ - это symbol, а значение - объект
+      state.symbolQuantity[symbol] = action.payload; 
     },
     removeSymbolQuantity: (state, action: PayloadAction<string>) => {
-      delete state.symbolQuantity[action.payload]; // Удаляем по ключу
+      delete state.symbolQuantity[action.payload]; 
     },
     clearSymbolQuantity: (state) => {
-      state.symbolQuantity = {}; // Очищаем объект
+      state.symbolQuantity = {}; 
     },
   },
 });

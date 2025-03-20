@@ -1,41 +1,39 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface TickerData {
+type Ticker = {
   s: string;
+  baseAsset: string;
   quantity: number;
   currentPrice: number;
   totalValue: number;
-  priceChange: number;
   priceChangePercent: number;
-  baseAsset: string;
-}
-
-interface TickerState {
-  data: Record<string, TickerData>; 
-}
-
-const initialState: TickerState = {
-  data: {}
+  valueInUSD: number | null;
 };
 
-const tickerSlice = createSlice({
-  name: "ticker",
+interface TickersState {
+  tickers: { [key: string]: Ticker };
+}
+
+const initialState: TickersState = {
+  tickers: {},
+};
+
+export const tickersSlice = createSlice({
+  name: "tickers",
   initialState,
   reducers: {
-    updateTicker: (state, action: PayloadAction<TickerData>) => {
-      const symbol = action.payload.s;
-      state.data = { ...state.data, [symbol]: action.payload }; 
+    setTicker: (state, action: PayloadAction<Ticker>) => {
+      state.tickers[action.payload.s] = action.payload;
     },
     removeTicker: (state, action: PayloadAction<string>) => {
-      delete state.data[action.payload];
+      delete state.tickers[action.payload];
     },
-    removeData: (state) => {
-      state.data = {};  
+    setTickers: (state, action: PayloadAction<{ [key: string]: Ticker }>) => {
+      state.tickers = action.payload;
     },
   },
 });
 
-export const { updateTicker, removeTicker, removeData } = tickerSlice.actions;
-export default tickerSlice.reducer;
+export const { setTicker, removeTicker, setTickers } = tickersSlice.actions;
 
-
+export default tickersSlice.reducer;

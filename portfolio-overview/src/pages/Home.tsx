@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { FormAdd } from "../components/FormAdd/FormAdd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
-import { TickerComponent } from "../components/Test";
 import { clearSymbolQuantity, updateSymbolQuantity } from "../store/symbolQuantitySlice";
+import { TickerComponent } from "../components/TickerComponent/TickerComponent";
+import axios from "axios";
 
 interface SymbolAndQuantity {
   symbol: string;
@@ -26,17 +27,30 @@ export const Home = () => {
 
   const symbolQuantity = useSelector((state: RootState) => state.symbolQuantity.symbolQuantity);
   const [isAddAction, setIsAddAction] = useState<boolean>(false)
-  const wsSockeds = useSelector((state: RootState) => state.websocket)
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("getPriceInUSD(BTC)",getPriceInUSD("ETH"))
+    // const pathСonvert = "https://api.binance.com/api/v3/ticker/price"
+    // axios.get(pathСonvert)
+
+  }, [])
 
   useEffect(() => {
   }, [symbolQuantity, isAddAction])
 
+  const getPriceInUSD = async (symbol: string): Promise<number | null> => {
+    const pathСonvert = `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`;
+    
+    try {
+        const { data } = await axios.get(pathСonvert);
+        return parseFloat(data.price);
+    } catch (error) {
+        console.warn(`Не удалось получить цену для ${symbol}:`, error);
+        return null;
+    }
+};
 
-  function show () {
-    console.log("wsSockeds: ",wsSockeds)
-    console.log("symbolQuantity: ", symbolQuantity);
-  }
 
 
 
@@ -61,19 +75,27 @@ export const Home = () => {
   }
 
   return (
-    <div>
-      <button onClick={() => deleteSubscription()}>Удалить все подписки</button>
-      <button onClick={show}>Показать подписки</button>
-      <button onClick={() => setIsAddAction(rev => !rev)}>ЖМЫХ</button>
-      {isAddAction &&
-      <FormAdd toggleAction={addSymbolQuantity}/>}
-      {Object.values(symbolQuantity).map((symbol) => (
-        <div key={symbol.symbol}>
-          <TickerComponent symbol={symbol.symbol} quantity={symbol.quantity} quoteAsset={symbol.quoteAsset} baseAsset={symbol.baseAsset}/>
-        </div>
-      )
-
-      )}
+    <div className="home-container">
+    <div className="header">
+      <h1 className="title">Portfolio Overview</h1>
+      <button className="add-button" onClick={() => setIsAddAction((prev) => !prev)}>Добавить</button>
     </div>
+    {Object.keys(symbolQuantity).length > 0 && 
+      <button className="remove-button" onClick={deleteSubscription}>Удалить все подписки</button>}
+
+    {isAddAction && <FormAdd toggleAction={addSymbolQuantity} />}
+
+    <div className="ticker-grid">
+      {Object.values(symbolQuantity).map((symbol) => (
+        <TickerComponent
+          key={symbol.symbol}
+          symbol={symbol.symbol}
+          quantity={symbol.quantity}
+          quoteAsset={symbol.quoteAsset}
+          baseAsset={symbol.baseAsset}
+        />
+      ))}
+    </div>
+  </div>
   );
 };
