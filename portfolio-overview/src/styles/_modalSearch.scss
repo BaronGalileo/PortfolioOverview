@@ -45,7 +45,7 @@
         transition: background 0.3s ease-in-out;
     
         &:hover {
-          background: col.$button__danger_hover; 
+          background: col.$button__danger--hover; 
         }
     }
   
@@ -68,11 +68,11 @@
       transition: background 0.3s ease-in-out;
   
       &:hover {
-        background: #45a049;
+        background: col.$button__green--hover;
       }
   
       &:disabled {
-        background: #ccc;
+        background: col.$button--disable;
         cursor: not-allowed;
       }
     }
@@ -81,14 +81,14 @@
     select {
       padding: 8px;
       font-size: 14px;
-      border: 1px solid #ccc;
+      border: 1px solid col.$font__color_1;
       border-radius: 6px;
       outline: none;
       width: 100%;
     }
   
     select {
-      background: white;
+      background: col.$font__color_2;
       cursor: pointer;
     }
   
@@ -104,12 +104,13 @@
         button {
           width: 100%;
           text-align: center;
-          background: #007bff;
-          color: white;
+          background: col.$background__color_2;
+          color: col.$font__color_3;
           transition: background 0.3s;
   
           &:hover {
-            background: #0056b3;
+            background: col.$background__color_2--hover;
+            color: col.$font__color_1;
           }
         }
       }

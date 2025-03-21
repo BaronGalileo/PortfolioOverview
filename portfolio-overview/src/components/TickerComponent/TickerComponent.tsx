@@ -11,9 +11,10 @@ type TickerProps = {
   quantity: number;
   baseAsset: string;
   quoteAsset: string;
+  totalPortfolioValue: number;
 };
 
-export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset }: TickerProps) => {
+export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset, totalPortfolioValue }: TickerProps) => {
   const dispatch = useDispatch();
   const tickers = useSelector((state: RootState) => state.tickers.tickers);
   const [portfolioShare, setPortfolioShare] = useState<number>(0);
@@ -43,8 +44,11 @@ export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset }: Tic
   });
 
   const getPriceInUSD = async (symbol: string): Promise<number | null> => {
+
+    const convertUrl = `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`;
+
     try {
-      const { data } = await axios.get(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`);
+      const { data } = await axios.get(convertUrl);
       return parseFloat(data.price);
     } catch (error) {
       console.warn(`Не удалось получить цену для ${symbol}:`, error);
@@ -56,8 +60,11 @@ export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset }: Tic
     if (tickers[symbol]) return;
 
     const fetchInitialPrice = async () => {
+
+      const httpsUrl = `https://api.binance.com/api/v3/ticker/price?symbol=${symbol.toUpperCase()}`;
+
       try {
-        const { data } = await axios.get(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol.toUpperCase()}`);
+        const { data } = await axios.get(httpsUrl);
         const usdPrice = await getPriceInUSD(baseAsset);
 
         dispatch(
@@ -78,8 +85,6 @@ export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset }: Tic
 
     fetchInitialPrice();
   }, []);
-
-  const totalPortfolioValue = Object.values(tickers).reduce((acc, ticker) => acc + (ticker.valueInUSD || 0), 0);
 
   useEffect(() => {
     const ticker = tickers[symbol];

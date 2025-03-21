@@ -30,6 +30,9 @@ export const Home = () => {
   const tickers = useSelector((state: RootState) => state.tickers.tickers);
   const [isAddAction, setIsAddAction] = useState<boolean>(false)
   const dispatch = useDispatch();
+  const totalPortfolioValue = Math.round(
+    Object.values(tickers).reduce((acc, ticker) => acc + (ticker.valueInUSD || 0), 0) * 100
+  ) / 100;
 
   useEffect(() => {
 
@@ -83,6 +86,7 @@ export const Home = () => {
     </div>
     {Object.keys(symbolQuantity).length > 0 && 
       <button className="remove-button" onClick={deleteSubscription}>Удалить все подписки</button>}
+      <div className="total-value">Общая сумма: {totalPortfolioValue} $</div>
 
     {isAddAction && <FormAdd toggleAction={addSymbolQuantity} />}
 
@@ -95,6 +99,7 @@ export const Home = () => {
             quantity={symbol.quantity}
             baseAsset={symbol.baseAsset}
             quoteAsset={symbol.quoteAsset}
+            totalPortfolioValue={totalPortfolioValue}
           />
         );
       })}

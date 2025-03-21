@@ -39,17 +39,30 @@ body {
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
-    background: #4CAF50;
-    color: white;
+    background: col.$button__green;
+    color: col.$font__color_2;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     transition: background 0.3s ease-in-out;
 
     &:hover {
-      background: #45a049;
+      background: col.$button__green--hover;
     }
   }
+}
+
+.total-value {
+  font-size: 2rem; 
+  font-weight: bold; 
+  text-align: center; 
+  color: col.$font__color_1; 
+  margin: 20px 0; 
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh; 
 }
 
 .ticker-grid {
@@ -67,13 +80,13 @@ body {
   font-size: 14px;
   font-weight: bold;
   color: white;
-  background-color: #d9534f;
+  background-color: col.$button__danger;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 
   &:hover {
-    background-color: #c9302c;
+    background-color: col.$button__danger--hover;
   }
 }
