@@ -75,6 +75,16 @@
         background: col.$button--disable;
         cursor: not-allowed;
       }
+
+      &.danger {
+        background-color: col.$button__danger;
+        color: col.$font__color_2;
+
+        &:hover {
+          background-color: col.$button__danger--hover;
+        }
+
+      }
     }
   
     input,

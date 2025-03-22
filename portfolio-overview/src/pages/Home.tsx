@@ -39,6 +39,7 @@ export const Home = () => {
   }, [])
 
   useEffect(() => {
+
   }, [symbolQuantity, isAddAction])
 
   const getPriceInUSD = async (symbol: string): Promise<number | null> => {
@@ -76,6 +77,7 @@ export const Home = () => {
     dispatch(clearSymbolQuantity())
     dispatch(removeAllTicker())
   }
+
 
 
   return (
