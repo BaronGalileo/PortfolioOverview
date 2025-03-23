@@ -5,6 +5,7 @@ import axios from "axios";
 import { removeSymbolQuantity } from "../../store/symbolQuantitySlice";
 import { RootState } from "../../store";
 import { removeTicker, updateTicker } from "../../store/tickerSlice";
+import { Button } from "../../ui/Button/Button";
 
 type TickerProps = {
   symbol: string;
@@ -128,9 +129,8 @@ export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset, total
             <p>Процент изменения за 24 часа: {tickers[symbol].priceChangePercent}%</p>
             {portfolioShare&&
             <p>Доля в портфеле: {portfolioShare}%</p>}
-            <button className="remove-button" onClick={() => disconnectWebSocket(tickers[symbol].s)}>
-            Убрать {tickers[symbol].baseAsset}
-            </button>
+            <Button className="remove-button" onClick={() => disconnectWebSocket(tickers[symbol].s)}>
+            Убрать {tickers[symbol].baseAsset}</Button>
         </div>}
     </div>
   );

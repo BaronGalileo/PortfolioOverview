@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { removeTicker } from "../../store/tickerSlice";
 import { removeSymbolQuantity } from "../../store/symbolQuantitySlice";
+import { Button } from "../../ui/Button/Button";
 
 interface ChildProps {
     toggleAction: (quantity?: number, symbol?: SymbolInfo) => void;
@@ -88,8 +89,7 @@ export const FormAdd = ({ toggleAction }: ChildProps) => {
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <button className="close-button" onClick={() => toggleAction()}>X</button>
-
+                <Button className="close-button" onClick={() => toggleAction()}>X</Button>
                 {targetAction ? (
                     <h1>Купить {quantity} {targetAction.baseAsset} за {targetAction.quoteAsset}</h1>
                 ) : (
@@ -99,7 +99,7 @@ export const FormAdd = ({ toggleAction }: ChildProps) => {
                 {targetAction && <button onClick={() => setTargetAction(null)}>Назад к списку</button>}
 
                 {targetAction &&
-                <button onClick={handleSubmit} disabled={!isReady}>Добавить подписку</button>}
+                <Button className='add-subscribe' onClick={handleSubmit} disabled={!isReady}>Добавить подписку</Button>}
                 <input type="number" onChange={handleChange} placeholder="Введите сумму" />
 
                 {!targetAction && (
@@ -122,20 +122,22 @@ export const FormAdd = ({ toggleAction }: ChildProps) => {
                 {filterTickerSubctibe && 
                     <ul>
                         <li>
-                            <button className="danger" onClick={() =>deleteSubscriptionFilter(filterTickerSubctibe?.s)}>Отписаться от {filterTickerSubctibe.quantity}  {filterTickerSubctibe.baseAsset} </button>
+                            <Button className="add-subscribe danger" onClick={() =>deleteSubscriptionFilter(filterTickerSubctibe?.s)}>
+                                Отписаться от {filterTickerSubctibe.quantity}  {filterTickerSubctibe.baseAsset}</Button>
                         </li>
                     </ul>}
 
                 <ul>
                     {!targetAction && filteredData.map((symbol, index) => (
                         <li key={index}>
-                            <button onClick={() => setTargetAction({
+                            <Button onClick={() => setTargetAction({
                                 symbol: symbol.symbol,
                                 quoteAsset: symbol.quoteAsset,
                                 baseAsset: symbol.baseAsset
                             })}>
                                 Купить {symbol.baseAsset} за {symbol.quoteAsset}
-                            </button>
+
+                            </Button>
                         </li>
                     ))}
                 </ul>

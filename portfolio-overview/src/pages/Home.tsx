@@ -6,6 +6,7 @@ import { clearSymbolQuantity, updateSymbolQuantity } from "../store/symbolQuanti
 import { TickerComponent } from "../components/TickerComponent/TickerComponent";
 import axios from "axios";
 import { removeAllTicker } from "../store/tickerSlice";
+import { Button } from "../ui/Button/Button";
 
 interface SymbolAndQuantity {
   symbol: string;
@@ -84,10 +85,10 @@ export const Home = () => {
     <div className="home-container">
     <div className="header">
       <h1 className="title">Portfolio Overview</h1>
-      <button className="add-button" onClick={() => setIsAddAction((prev) => !prev)}>Добавить</button>
+      <Button className="add-button" onClick={() => setIsAddAction((prev) => !prev)}>Добавить</Button>
     </div>
     {Object.keys(symbolQuantity).length > 0 && 
-      <button className="remove-button" onClick={deleteSubscription}>Удалить все подписки</button>}
+      <Button className="remove-button" onClick={deleteSubscription}>Удалить все подписки</Button>}
       <div className="total-value">Общая сумма: {totalPortfolioValue} $</div>
 
     {isAddAction && <FormAdd toggleAction={addSymbolQuantity} />}

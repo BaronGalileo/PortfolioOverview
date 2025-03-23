@@ -56,16 +56,16 @@
       color: #333;
     }
   
-    button {
-      padding: 10px;
-      font-size: 14px;
-      font-weight: bold;
+    .add-subscribe {
+      // padding: 10px;
+      // font-size: 14px;
+      // font-weight: bold;
       background: col.$button__green;
       color: col.$font__color_2;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease-in-out;
+      // border: none;
+      // border-radius: 8px;
+      // cursor: pointer;
+      // transition: background 0.3s ease-in-out;
   
       &:hover {
         background: col.$button__green--hover;
