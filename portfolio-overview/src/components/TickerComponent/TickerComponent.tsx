@@ -129,8 +129,11 @@ export const TickerComponent = ({ symbol, quantity, baseAsset, quoteAsset, total
             <p>Процент изменения за 24 часа: {tickers[symbol].priceChangePercent}%</p>
             {portfolioShare&&
             <p>Доля в портфеле: {portfolioShare}%</p>}
-            <Button className="remove-button" onClick={() => disconnectWebSocket(tickers[symbol].s)}>
-            Убрать {tickers[symbol].baseAsset}</Button>
+            <Button 
+            className="remove-button" 
+            onClick={() => disconnectWebSocket(tickers[symbol].s)}>
+              Убрать {tickers[symbol].baseAsset}
+            </Button>
         </div>}
     </div>
   );

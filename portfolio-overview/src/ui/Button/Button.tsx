@@ -1,39 +1,31 @@
 import React from "react";
-import classNames from 'classnames';
+import classNames from "classnames";
 
-interface ButtonProps{
-    children?: React.ReactNode,
-    onClick?: React.MouseEventHandler<HTMLButtonElement>,
-    className?: string,
-    disabled?: boolean,
+interface ButtonProps {
+  children?: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  className?: string;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
+  active?: boolean;
 }
 
-
-
-export const Button = ({children = 'Default button', onClick =() => {}, className = '', disabled = false}: ButtonProps) => {
-
-    function onClickAction(e: React.MouseEvent<HTMLButtonElement>) {
-        if (disabled) {
-            e.preventDefault();
-        } else {
-            onClick(e);
-        }
-    }
-
-    const classes = classNames( 'btn',
-        className
-        )
-
-    
-
-
-
-
-    return(
-        <button
-            className={classes}
-            disabled={disabled}
-            onClick={onClickAction}
-            >{children}</button>
-    );
+export const Button = ({
+  children = "Default button",
+  onClick = () => {},
+  className = "",
+  disabled = false,
+  type = "button",
+  active = false,
+} : ButtonProps) => {
+  return (
+    <button
+      type={type}
+      className={classNames("btn", className, { active })}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
 };

@@ -5,6 +5,8 @@ import { RootState } from "../../store";
 import { removeTicker } from "../../store/tickerSlice";
 import { removeSymbolQuantity } from "../../store/symbolQuantitySlice";
 import { Button } from "../../ui/Button/Button";
+import { Input } from "../../ui/Input/Input";
+import { Select } from "../../ui/Select/Select";
 
 interface ChildProps {
     toggleAction: (quantity?: number, symbol?: SymbolInfo) => void;
@@ -100,24 +102,25 @@ export const FormAdd = ({ toggleAction }: ChildProps) => {
 
                 {targetAction &&
                 <Button className='add-subscribe' onClick={handleSubmit} disabled={!isReady}>Добавить подписку</Button>}
-                <input type="number" onChange={handleChange} placeholder="Введите сумму" />
+                <Input type="number" onChange={handleChange} placeholder="Введите сумму"/>
 
                 {!targetAction && (
-                    <input
+                    <Input
                         type="text"
                         placeholder="Введите название валюты"
                         value={filterBase}
                         onChange={(e) => setFilterBase(e.target.value)}
                     />
                 )}
-
                 {!targetAction && (
-                    <select value={filterQuote} onChange={(e) => setFilterQuote(e.target.value)}>
-                        <option value="">За эту валюту покупаем </option>
-                        {uniqueQuoteAssets.map((asset) => (
-                            <option key={asset} value={asset}>{asset}</option>
-                        ))}
-                    </select>
+                    <Select 
+                    value={filterQuote}
+                    onChange={(e) => setFilterQuote}
+                    options = {[
+                        { value: "", label: "За эту валюту покупаем" },
+                        ...uniqueQuoteAssets.map((asset) => ({ value: asset, label: asset }))
+                        ]}
+                    />
                 )}
                 {filterTickerSubctibe && 
                     <ul>

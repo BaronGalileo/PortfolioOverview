@@ -31,6 +31,17 @@ body {
     transform: scale(0.95); 
     transition: transform 0.1s ease-out; 
   }
+
+}
+
+.select,
+.input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid col.$font__color_1;
+  border-radius: 6px;
+  outline: none;
+  width: 100%;
 }
 .home-container {
   display: flex;
