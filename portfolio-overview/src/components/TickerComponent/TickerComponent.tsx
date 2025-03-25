@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useWebSocket from "react-use-websocket";
-import axios from "axios";
-import { removeSymbolQuantity } from "../../store/symbolQuantitySlice";
 import { RootState } from "../../store";
+import { removeSymbolQuantity } from "../../store/symbolQuantitySlice";
 import { removeTicker, updateTicker } from "../../store/tickerSlice";
 import { Button } from "../../ui/Button/Button";
 

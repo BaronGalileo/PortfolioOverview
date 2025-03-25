@@ -1,17 +1,17 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit'
-import { 
-  persistStore,
-  persistReducer,
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import {
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
+  persistReducer,
+  persistStore,
   PURGE,
   REGISTER,
- } from 'redux-persist'
+  REHYDRATE,
+} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import tickerReducer from './tickerSlice'
 import symbolQuantityReducer from './symbolQuantitySlice';
+import tickerReducer from './tickerSlice';
 
 
 

@@ -1,10 +1,10 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
-import { FormAdd } from "../components/FormAdd/FormAdd";
 import { useDispatch, useSelector } from "react-redux";
+import { FormAdd } from "../components/FormAdd/FormAdd";
+import { TickerComponent } from "../components/TickerComponent/TickerComponent";
 import { RootState } from "../store";
 import { clearSymbolQuantity, updateSymbolQuantity } from "../store/symbolQuantitySlice";
-import { TickerComponent } from "../components/TickerComponent/TickerComponent";
-import axios from "axios";
 import { removeAllTicker } from "../store/tickerSlice";
 import { Button } from "../ui/Button/Button";
 

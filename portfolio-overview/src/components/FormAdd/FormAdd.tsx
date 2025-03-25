@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { removeTicker } from "../../store/tickerSlice";
 import { removeSymbolQuantity } from "../../store/symbolQuantitySlice";
+import { removeTicker } from "../../store/tickerSlice";
 import { Button } from "../../ui/Button/Button";
 import { Input } from "../../ui/Input/Input";
 import { Select } from "../../ui/Select/Select";

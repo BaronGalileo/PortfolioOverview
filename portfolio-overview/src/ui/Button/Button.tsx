@@ -1,5 +1,5 @@
-import React from "react";
 import classNames from "classnames";
+import React from "react";
 
 interface ButtonProps {
   children?: React.ReactNode;
@@ -11,7 +11,7 @@ interface ButtonProps {
 }
 
 export const Button = ({
-  children = "Default button",
+  children = "Кнопка",
   onClick = () => {},
   className = "",
   disabled = false,
